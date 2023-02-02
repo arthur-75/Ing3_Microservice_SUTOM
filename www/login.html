@@ -1,0 +1,67 @@
+<html>
+<head>
+    <link rel="stylesheet" href="/css/app.css">
+    <!-- Jquery -->
+    <script src="/jquery-3.6.0.js"></script>
+</head>
+
+<body>
+    <div>
+        <form id="input" onsubmit="return submit_response()">
+            <h2>Login</h2>
+            <div class="input-field">
+                <input type="text" name="username" id="username" placeholder="Enter Username">
+            </div>
+
+            <div class="input-field">
+                <input type="password" name="password" id="password" placeholder="Enter Password">
+            </div>
+            <input type="submit" value="LogIn">
+        </form>
+
+        <form action="http://localhost:4001/signIn.html" method="get">
+            <input type="submit" value="Create an account">
+        </form>
+        <br><br><span id="response" style="color: red"></span>
+    </div>
+</body>
+<script>
+
+    // Verification si l'utilisateur est connecté
+    $.ajax({
+        url: "http://localhost:4000/get_user",
+        type: "GET",
+        success: function (data) {
+            if (data.username != null) {
+                alert('You are already logged in');
+                window.location.href = "http://localhost:4000";
+            }
+        }
+    });
+
+    // On envoie les données à l'API Auth qui vérifie si cela correspond bien
+    function submit_response() {
+        // Appel de l'API auth
+        $.ajax({
+            url: "http://localhost:4001/user",
+            type: "POST",
+            data: {
+                'username': $("#username").val(),
+                'password': $("#password").val()
+            },
+            success: function (data) {
+                if (data.status == 'fail') {
+                    document.getElementById('response').innerHTML = data.err
+                    return false;
+                }
+                if (typeof data.token != 'undefined'){
+                    window.location.href = "http://localhost:4000/callback?code=" + data.token
+                }
+            }
+        })
+        return false;
+    }
+
+</script>
+
+</html>

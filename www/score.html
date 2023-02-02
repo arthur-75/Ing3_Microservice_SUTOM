@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="/google.font.css">
+    <!-- CSS Reset -->
+    <link rel="stylesheet" href="/css/normalize/8.0.1/normalize.css">
+    <!-- Milligram CSS -->
+    <link rel="stylesheet" href="/css/milligram/1.4.1/milligram.css">
+
+    <!-- Jquery -->
+    <script src="/jquery-3.6.0.js"></script>
+
+    <title>The App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    body {font-family: "Lato", sans-serif}
+    .mySlides {display: none}
+    </style>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body >
+
+ <!-- Navbar -->
+ <div class="w3-top">
+    <div class="w3-bar w3-black w3-card">
+      <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+      <a href="http://localhost:4000/" class="w3-bar-item w3-button w3-padding-large">Go back to the game</a>
+      <a href="#band" class="w3-bar-item w3-button w3-padding-large w3-hide-small">RULES</a>
+      <a href = 'http://localhost:4000/logout' class="w3-bar-item w3-button w3-padding-large w3-hide-small">Logout</a>
+
+    </div>
+  </div>
+
+      <!-- Navbar on small screens (remove the onclick attribute if you want the navbar to always show on top of the content when clicking on the links) -->
+<div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+    <a href="#band" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">RULES</a>
+  </div>
+
+
+
+
+
+
+
+
+  
+        <!-- <input value="PLAY" onclick="document.location='http://localhost:4000/index.html'" style="background-color: green; border-radius: 4 px; opacity: 0.8">
+        -->
+
+            <h1 class="w3-container w3-content w3-center w3-padding-64">
+            You guessed <span id="score"><%= score %></span>  words !
+            </h1>
+
+            <h1 class="w3-container w3-content w3-center w3-padding-64">
+            Average attempts : <span id="average"><%= average %></span>
+            </h1>
+
+
+<br><br><br><br><br><br><br><br><br><br>
+
+ <!-- The Band Section -->
+ <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
+     <h2 class="w3-wide">RULES</h2>
+     <p class="w3-opacity"><i>We love playing sutom</i></p>
+     <p class="w3-justify">
+        This app allow a user to play the game of SUTOM by submitting a sequence of letters in order to find a specific word. If the submitted letters appear:
+
+        </br>    - Green: the submitted letter corresponds to the letter of the word that has to be find.
+        </br>    - Orange: the submittted letter is in the word that has to be find, but not at the right position.
+        </br>    - Red: the submitted letter is not in the word that has to be find.
+
+        </br>The user can submit as much letter sequences as she/he wants untill he/she wins.
+     </p>
+     <div class="w3-row w3-padding-32">
+       
+     </div>
+   
+ <!-- End Page Content -->
+ </div>
+ 
+ 
+ <footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
+     <a href="https://github.com/Danguilhen/Ing3_Microservice_SUTOM"><i class="fa fa-github w3-hover-opacity"></i></a>
+     <p class="w3-medium">Powered by Céline, Emil, Thomas and Arthur</p>
+   </footer>
+ </body>
+ </html>
+ 
+ 
+ 
+ 
+ 
+
+<script>
+
+    // Verification si l'utilisateur est connecté
+    var user
+    $.ajax({
+        url: "http://localhost:4000/get_user",
+        type: "GET",
+        async: false,
+        success: function (data) {
+            if (data.username == null) {
+                alert('Please log in first');
+                window.location.href = "http://localhost:4001/login.html";
+            }
+            if (data.username != null) {
+                document.getElementById('user').innerHTML = data.username
+            }
+            user = data.username
+        }
+    });
+
+</script>
+</html>
