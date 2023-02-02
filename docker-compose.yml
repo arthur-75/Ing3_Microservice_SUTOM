@@ -1,0 +1,79 @@
+version: "3.7"
+
+services:
+  score_service:
+    build:
+      context: .
+      args:
+        - NODE_ENV=local
+      dockerfile: Dockerfile.score
+    ports:
+      - "5000:5000"
+    restart: always
+    init: true
+  index_service:
+    build:
+      context: .
+      args:
+        - NODE_ENV=local
+      dockerfile: Dockerfile.index
+    ports:
+      - "4000:4000"
+    environment:
+      - LOKI=http://loki:3100
+    restart: always
+    init: true
+  auth_service:
+    build:
+      context: .
+      args:
+        - NODE_ENV=local
+      dockerfile: Dockerfile.auth
+    ports:
+      - "4001:4001"
+    restart: always
+    init: true
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+  loki:
+    image: grafana/loki
+    container_name: loki
+    ports:
+      - 3100:3100
+    restart: unless-stopped
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    expose:
+      - 9090
+    ports:
+      - 9090:9090
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    expose:
+      - 9100
+    ports:
+      - 9100:9100
+    # networks:
+      # - monitor-net
